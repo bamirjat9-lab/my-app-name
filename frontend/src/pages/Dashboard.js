@@ -36,6 +36,7 @@ export default function Dashboard() {
 
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [meetings, setMeetings] = useState([]);
+  const [meetingsLoading, setMeetingsLoading] = useState(false);
   const [weekendSessions, setWeekendSessions] = useState([]);
 
   const intervalRef = useRef(null);
@@ -68,6 +69,8 @@ export default function Dashboard() {
   }, [fetchSession]);
 
   useEffect(() => {
+    setMeetingsLoading(true);
+    setMeetings([]);
     fetch(`${API}/api/meetings?year=${selectedYear}`)
       .then((r) => r.json())
       .then((data) => {
@@ -75,7 +78,8 @@ export default function Dashboard() {
           (data || []).filter((m) => !m.name?.toLowerCase().includes("testing"))
         );
       })
-      .catch(() => setMeetings([]));
+      .catch(() => setMeetings([]))
+      .finally(() => setMeetingsLoading(false));
   }, [selectedYear]);
 
   useEffect(() => {
@@ -136,6 +140,7 @@ export default function Dashboard() {
         sessionData={d}
         weekendSessions={weekendSessions}
         meetings={meetings}
+        meetingsLoading={meetingsLoading}
         selectedYear={selectedYear}
         onYearChange={setSelectedYear}
         sessionKey={sessionKey}

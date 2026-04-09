@@ -15,6 +15,7 @@ export default function MobileDashboard({
   sessionData,
   weekendSessions,
   meetings,
+  meetingsLoading,
   selectedYear,
   onYearChange,
   sessionKey,
@@ -33,6 +34,7 @@ export default function MobileDashboard({
         session={d?.session}
         weekendSessions={weekendSessions}
         meetings={meetings}
+        meetingsLoading={meetingsLoading}
         selectedYear={selectedYear}
         onYearChange={onYearChange}
         onSessionChange={onSessionChange}
