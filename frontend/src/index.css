@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #08090d;
+  color: #e6edf3;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0e1018; }
+::-webkit-scrollbar-thumb { background: #252a3a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3b4255; }
+
+/* Panel base styles */
+@layer components {
+  .panel {
+    @apply bg-f1-card rounded-xl border border-f1-border shadow-panel overflow-hidden;
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.015) 0%, transparent 50%);
+  }
+  .panel-header {
+    @apply px-4 py-3 border-b border-f1-border;
+  }
+  .panel-header-red {
+    @apply px-4 py-3;
+    background: linear-gradient(135deg, #e10600 0%, #b80500 100%);
+  }
+  .panel-body {
+    @apply bg-f1-surface/50;
+  }
+}
+
+/* Glow utilities */
+@layer utilities {
+  .glow-red { box-shadow: 0 0 20px rgba(225,6,0,0.12), inset 0 1px 0 rgba(255,255,255,0.04); }
+  .glow-soft { box-shadow: 0 0 30px rgba(225,6,0,0.06); }
+}
+
+/* Smooth transitions on all interactive elements */
+* { transition-property: color, background-color, border-color, opacity, box-shadow; transition-duration: 150ms; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Hide scrollbar for horizontal scroll sections on mobile */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Safe area for notch devices */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Mobile touch feedback */
+@media (max-width: 1023px) {
+  * { -webkit-tap-highlight-color: transparent; }
+  body::before { display: none; } /* Remove noise texture on mobile for perf */
+}
