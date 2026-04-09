@@ -14,6 +14,9 @@ const TABS = [
 export default function MobileDashboard({
   sessionData,
   weekendSessions,
+  meetings,
+  selectedYear,
+  onYearChange,
   sessionKey,
   onSessionChange,
   isLive,
@@ -29,6 +32,9 @@ export default function MobileDashboard({
       <MobileHeader
         session={d?.session}
         weekendSessions={weekendSessions}
+        meetings={meetings}
+        selectedYear={selectedYear}
+        onYearChange={onYearChange}
         onSessionChange={onSessionChange}
         isLive={isLive}
         lastUpdated={lastUpdated}
@@ -53,7 +59,6 @@ export default function MobileDashboard({
         </div>
       </div>
 
-      {/* Error banner */}
       {error && (
         <div className="mx-3 mt-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-2 text-[10px] text-yellow-400 font-medium">
           ⚠ Refresh failed — showing cached data
@@ -62,24 +67,9 @@ export default function MobileDashboard({
 
       {activeTab === "live" && (
         <div className="space-y-3 pt-3">
-          {/* Insights — horizontal scrollable cards */}
-          <MobileInsights
-            standings={d?.standings}
-            weather={d?.weather}
-            raceControl={d?.raceControl}
-          />
-
-          {/* Info bar — weather, flag, tyres as chips */}
-          <MobileInfoBar
-            weather={d?.weather}
-            raceControl={d?.raceControl}
-            standings={d?.standings}
-          />
-
-          {/* Battles — horizontal scrollable */}
+          <MobileInsights standings={d?.standings} weather={d?.weather} raceControl={d?.raceControl} />
+          <MobileInfoBar weather={d?.weather} raceControl={d?.raceControl} standings={d?.standings} />
           <MobileBattles standings={d?.standings} />
-
-          {/* Leaderboard — the main content */}
           <div className="px-3">
             <MobileLeaderboard standings={d?.standings} />
           </div>
@@ -92,7 +82,6 @@ export default function MobileDashboard({
         </div>
       )}
 
-      {/* Floating refresh button */}
       <button
         onClick={onRefresh}
         className="fixed bottom-6 right-4 z-50 bg-f1-card border border-f1-border rounded-full w-12 h-12 flex items-center justify-center shadow-panel active:scale-95"

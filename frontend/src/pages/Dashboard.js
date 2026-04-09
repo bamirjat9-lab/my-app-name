@@ -135,6 +135,9 @@ export default function Dashboard() {
       <MobileDashboard
         sessionData={d}
         weekendSessions={weekendSessions}
+        meetings={meetings}
+        selectedYear={selectedYear}
+        onYearChange={setSelectedYear}
         sessionKey={sessionKey}
         onSessionChange={(key) => setSessionKey(String(key))}
         isLive={sessionKey === "latest"}
