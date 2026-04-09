@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/api/session", "destination": "/api/session" },
+    { "source": "/api/sessions", "destination": "/api/sessions" },
+    { "source": "/api/meetings", "destination": "/api/meetings" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  }
+}

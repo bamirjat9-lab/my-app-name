@@ -11,7 +11,7 @@ import TyreSummary from "../components/TyreSummary";
 import RaceEvents from "../components/RaceEvents";
 import MobileDashboard from "../mobile/MobileDashboard";
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === "production" ? "" : "http://localhost:4000");
 const REFRESH_INTERVAL = 15_000;
 const MOBILE_BREAKPOINT = 1024;
 

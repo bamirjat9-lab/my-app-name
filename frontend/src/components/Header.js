@@ -167,7 +167,7 @@ function GPRow({ meeting, isActive, onSelect }) {
   const [sessions, setSessions] = useState(null);
   const [loadingSessions, setLoadingSessions] = useState(false);
 
-  const API = process.env.REACT_APP_API_URL || "http://localhost:4000";
+  const API = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === "production" ? "" : "http://localhost:4000");
 
   const handleClick = () => {
     if (expanded) { setExpanded(false); return; }
