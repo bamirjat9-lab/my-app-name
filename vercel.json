@@ -1,0 +1,17 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/build",
+  "installCommand": "echo 'skip'",
+  "framework": null,
+  "functions": {
+    "frontend/api/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/api/session", "destination": "/frontend/api/session" },
+    { "source": "/api/sessions", "destination": "/frontend/api/sessions" },
+    { "source": "/api/meetings", "destination": "/frontend/api/meetings" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
