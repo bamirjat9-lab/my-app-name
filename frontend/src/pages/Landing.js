@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 export default function Landing() {
+  const carsRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!carsRef.current) return;
+      const scrollY = window.scrollY;
+      // Cars drive up and fade out as you scroll down (over first 500px)
+      const progress = Math.min(scrollY / 500, 1);
+      carsRef.current.style.transform = `translateY(${-scrollY * 0.4}px)`;
+      carsRef.current.style.opacity = 1 - progress;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-f1-bg text-white overflow-hidden">
       {/* Nav */}
@@ -28,7 +46,24 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center">
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Background F1 cars image — drives up on load, parallax on scroll */}
+        <div
+          ref={carsRef}
+          className="absolute inset-0 pointer-events-none"
+          style={{ willChange: "transform, opacity" }}
+        >
+          <img
+            src="/f1-hero.png"
+            alt=""
+            className="w-full h-full object-cover scale-110"
+          />
+          {/* Gentle overlay on left so text is readable */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1117]/50 via-transparent to-transparent" />
+          {/* Fade at bottom edge only */}
+          <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-[#0d1117] to-transparent" />
+        </div>
+
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Subtle track curves */}
@@ -50,18 +85,18 @@ export default function Landing() {
         <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-16 w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: Text */}
-            <div>
-              <div className="inline-block border border-f1-red/40 text-f1-red text-xs font-bold tracking-widest px-4 py-1.5 rounded mb-8">
+            <div className="bg-[#0d1117]/60 backdrop-blur-sm rounded-xl p-6 -m-6">
+              <div className="inline-block border border-white/40 text-white text-xs font-bold tracking-widest px-4 py-1.5 rounded mb-8 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                 YOUR SECOND SCREEN FOR RACE DAY
               </div>
 
               <h1 className="font-black tracking-tight leading-[0.9]">
-                <span className="block text-[clamp(3rem,7vw,5.5rem)] text-white">WATCH THE</span>
-                <span className="block text-[clamp(3rem,7vw,5.5rem)] text-white">RACE</span>
-                <span className="block text-[clamp(3rem,7vw,6rem)] text-f1-red italic mt-2">SMARTER</span>
+                <span className="block text-[clamp(3rem,7vw,5.5rem)] text-white drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">WATCH THE</span>
+                <span className="block text-[clamp(3rem,7vw,5.5rem)] text-white drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">RACE</span>
+                <span className="block text-[clamp(3rem,7vw,6rem)] text-f1-red italic mt-2 drop-shadow-[0_2px_12px_rgba(0,0,0,1)]" style={{ WebkitTextStroke: "1px rgba(0,0,0,0.4)" }}>SMARTER</span>
               </h1>
 
-              <p className="text-gray-400 text-lg mt-8 max-w-md leading-relaxed">
+              <p className="text-white/90 text-lg mt-8 max-w-md leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                 Understand every pit stop, battle, and strategy decision live.
                 See who's on an undercut, which gaps are closing, and when
                 the next pit window opens — all in real time.
@@ -273,16 +308,12 @@ function MonacoCircuit() {
 
         {/* Track outer glow */}
         <path d={MONACO_PATH} fill="none" stroke="rgba(225,6,0,0.03)" strokeWidth="36" strokeLinecap="round" strokeLinejoin="round" />
-
         {/* Track surface (dark asphalt) */}
         <path d={MONACO_PATH} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="24" strokeLinecap="round" strokeLinejoin="round" />
-
         {/* Track inner (cut out to show bg) */}
         <path d={MONACO_PATH} fill="none" stroke="#0d1117" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" />
-
         {/* Track road surface */}
         <path d={MONACO_PATH} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" />
-
         {/* Center racing line (dashed) */}
         <path d={MONACO_PATH} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="8 10" strokeLinecap="round" strokeLinejoin="round" />
 
@@ -291,7 +322,7 @@ function MonacoCircuit() {
           <animate attributeName="stroke-dashoffset" values="0;-3200" dur="10s" repeatCount="indefinite" />
         </path>
 
-        {/* Start/finish line near Antony Noghes */}
+        {/* Start/finish line */}
         <line x1="98" y1="645" x2="112" y2="660" stroke="#e10600" strokeWidth="4" />
         <line x1="100" y1="648" x2="114" y2="663" stroke="white" strokeWidth="1.5" strokeDasharray="3 3" />
 
@@ -299,14 +330,7 @@ function MonacoCircuit() {
         {CORNERS.map((c, i) => (
           <g key={i} opacity="0.6">
             <circle cx={c.x} cy={c.y} r="2.5" fill="rgba(255,255,255,0.25)" />
-            <text
-              x={c.x + 10}
-              y={c.y + 4}
-              fill="rgba(255,255,255,0.22)"
-              fontSize="10"
-              fontFamily="Inter, sans-serif"
-              fontWeight="600"
-            >
+            <text x={c.x + 10} y={c.y + 4} fill="rgba(255,255,255,0.22)" fontSize="10" fontFamily="Inter, sans-serif" fontWeight="600">
               {c.name}
             </text>
           </g>
@@ -315,26 +339,21 @@ function MonacoCircuit() {
         {/* Racing cars animating along the real circuit */}
         {CARS.map((car, i) => (
           <g key={i}>
-            {/* Outer glow */}
             <circle r={car.size + 6} fill={car.color} opacity="0.12" filter={`url(#carGlow${i})`}>
               <animateMotion dur={car.dur} begin={car.begin} repeatCount="indefinite" rotate="auto" path={MONACO_PATH} />
             </circle>
-            {/* Inner glow */}
             <circle r={car.size + 2} fill={car.color} opacity="0.25" filter={`url(#carGlow${i})`}>
               <animateMotion dur={car.dur} begin={car.begin} repeatCount="indefinite" rotate="auto" path={MONACO_PATH} />
             </circle>
-            {/* Car dot */}
             <circle r={car.size / 2 + 1} fill={car.color} style={{ filter: `drop-shadow(0 0 8px ${car.glow})` }}>
               <animateMotion dur={car.dur} begin={car.begin} repeatCount="indefinite" rotate="auto" path={MONACO_PATH} />
             </circle>
-            {/* White center dot */}
             <circle r="1.5" fill="white" opacity="0.9">
               <animateMotion dur={car.dur} begin={car.begin} repeatCount="indefinite" rotate="auto" path={MONACO_PATH} />
             </circle>
           </g>
         ))}
 
-        {/* Circuit name watermark */}
         <text x="250" y="500" fill="rgba(255,255,255,0.04)" fontSize="28" fontFamily="Inter, sans-serif" fontWeight="900" letterSpacing="0.15em">
           MONACO
         </text>
@@ -363,3 +382,4 @@ function MonacoCircuit() {
     </div>
   );
 }
+

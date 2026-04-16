@@ -36,6 +36,15 @@ module.exports = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "card-sheen": "linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%)",
       },
+      keyframes: {
+        driveUp: {
+          "0%": { transform: "translateY(80px)", opacity: "0" },
+          "100%": { transform: "translateY(0px)", opacity: "1" },
+        },
+      },
+      animation: {
+        driveUp: "driveUp 1.2s ease-out forwards",
+      },
     },
   },
   plugins: [],
